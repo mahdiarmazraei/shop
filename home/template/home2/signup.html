@@ -4,16 +4,28 @@
   <h2>Sign up</h2>
   <form method="post" class="align-items-center djustify-content-center">
     {% csrf_token %}
-    {% for field in form %}
+    <!-- {% for field in form %} -->
       <p>
         <!-- {{ field.label_tag }}<br> -->
-        <label>hello</label><br>
+        <!-- <label>hello</label><br>
         {{ field }}
         {% for error in field.errors %}
           <p style="color: red">{{ error }}</p>
         {% endfor %}
       </p>
-    {% endfor %}
+    {% endfor %} -->
+    username:
+    <br/>
+    <input type="text" name="username" />
+    <br/>
+    Password:
+    <br/>
+    <input type="password" name="password1" />
+    <br/>
+    confirm Password:
+    <br/>
+    <input type="password" name="password2" />
+    <br/>
     <button type="submit" class="btn btn-success">ثبت نام</button>
     <h6>do you signup </h6>                
     <a class="pull-right" href="{% url 'signin' %}">ورود</a>
