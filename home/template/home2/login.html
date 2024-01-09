@@ -1,20 +1,38 @@
-{% extends 'home2/base.html' %}
-  
-{% block title %}Login{% endblock %}
-  
-{% block content %}
-  <h2>Login</h2> {{ msg }}
-  <form method="post">
-    {% csrf_token %}
-    <!-- {{ form.as_p }} -->
-    username:
-    <br/>
-    <input type="text" name="username" />
-    <br/>
-    Password:
-    <br/>
-    <input type="password" name="password" />
-    <br/>
-    <button type="submit" class="btn btn-primary">ورود  </button>
-  </form>
-{% endblock %}
+{% load static %}
+
+
+<!DOCTYPE html>
+<!-- Created By CodingLab - www.codinglabweb.com -->
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Login Form | CodingLab</title> 
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
+  </head>
+  <body>
+    <div class="container">
+      <div class="wrapper">
+        <div class="title"><span>گیت ورود   </span></div>
+        <form method="post">
+          {% csrf_token %}
+          <div class="row">
+            <i class="fas fa-user"></i>
+            <input type="text" name="username" placeholder=" نام کاربری " required>
+          </div>
+          <div class="row">
+            <i class="fas fa-lock"></i>
+            <input type="password" name="password" placeholder=" رمز عبور " required>
+          </div>
+          <div class="pass"><a href="#">آیا رمز عبور خود را فراموش کرده اید؟ </a></div>
+          <div class="row button">
+            <button type="submit" class="btn btn-primary">ورود  </button>
+          </div>
+          <div class="signup-link">حساب کاربری ندارید؟<a href="{% url 'signup' %}"> ثبت نام کنید</a></div>
+        </form>
+      </div>
+    </div>
+
+  </body>
+</html>

@@ -6,15 +6,16 @@ from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView,LogoutView
 from django.contrib.auth import login,authenticate,logout
-from .models import reg
+from .models import reg,Product
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 
 
 
 
-@login_required(login_url='signin')
+
 def home(request):
-    return render(request,'home2/home2.html')
+    products = Product.objects.all()
+    return render(request,'home2/home2.html',{'products':products})
 def signin(request):
     if request.user.is_authenticated:
         return render(request, 'home2/home2.html')
@@ -34,13 +35,17 @@ def signin(request):
         return render(request, 'home2/login.html', {'form': form})
 @login_required(login_url='signin')
 def profile(request):
-    return render(request,'home2/profile.html')
+    account = request.user
+    context={}
+    context['user']=account
+    return render(request,'home2/profile.html',{'user':account})
+    # return render(request,'home2/profile.html')
 def signout(request):
     logout(request)
     return redirect('/')
 def signup(request):
     if request.user.is_authenticated:
-        return redirect('/')
+        return redirect('/')    
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
