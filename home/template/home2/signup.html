@@ -1,5 +1,6 @@
 {% extends 'home2/base.html' %}
-  
+{% load static %}
+
 {% block content %}
   <h2>Sign up</h2>
   <form method="post" class="align-items-center djustify-content-center">
@@ -27,11 +28,17 @@
     <br/>
     <input type="password" name="password2" />
     <br/>
+    <br/> 
+   
+    <br/>
     <button type="submit" class="btn btn-success">ثبت نام</button>
     <h6>do you signup </h6>                
     <a class="pull-right" href="{% url 'signin' %}">ورود</a>
 
   </form> 
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script src="{% static 'js/script.js' %}" defer></script>
+
   {% endblock %}
 <!--<!DOCTYPE html> -->
 <!-- Created By CodingLab - www.codinglabweb.com -->

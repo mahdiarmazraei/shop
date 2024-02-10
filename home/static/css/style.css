@@ -112,3 +112,32 @@ form .button input:hover{
 form .signup-link a:hover{
   text-decoration: underline;
 }
+/* استایل دهی به دکمه‌های افزایش و کاهش */
+.quantity {
+  display: flex;
+  align-items: center;
+}
+
+.decrease-btn,
+.increase-btn {
+  border: none;
+  padding: 5px 10px;
+  font-size: 1.2em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.decrease-btn:hover,
+.increase-btn:hover {
+  background-color: #f0f0f0;
+}
+
+.quantity-input {
+  min-width: 10px;
+  max-width: 10px;
+  width: 10px;
+  min-height: 10px;
+  text-align: center;
+  margin: 0 10px;
+  font-size: 1em;
+}

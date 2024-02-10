@@ -1,0 +1,52 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>صفحه ثبت نام</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'css/style2.css' %}" />
+  </head>
+  <body>
+    <form method="post">
+        {% csrf_token %}
+<div class="login-form">
+  <div class="form-title">
+    ثبت نام
+  </div>
+  <div class="form-input">
+    <label for="username">نام کاربری</label>
+    <input type="text" id="username" name="username" placeholder="نام کاربری خود را وارد کنید">
+  </div>
+  <div class="form-input">
+    <label for="password">رمز عبور</label>
+    <input type="password" id="password" name="password1" placeholder="رمز عبور خود را وارد کنید">
+  </div>
+  <div class="form-input">
+    <label for="password">تایید رمز عبور</label>
+    <input type="password" id="password" name="password2" placeholder="رمز عبور خود را تایید کنید">
+  </div>
+  <!-- <div class="captcha">
+    <label for="captcha-input">کد امنیتی</label>
+    <div class="preview"></div>
+    <div class="captcha-form">
+      <input type="text" id="captcha-form" placeholder="کد امنیتی را وارد کنید">
+      <button class="captcha-refresh">
+        <i class="fa fa-refresh"></i>
+      </button>
+    </div>
+  </div> -->
+  <div class="form-input">
+    <button type="submit" id="login-btn">ثبت نام</button>
+  </div>
+<h5 style="text-align: center;">ایا قبلا ثبت نام کرده اید؟ <a class="signin-link" href="{% url 'signin' %}">ورود</a></h5>
+
+
+</div>
+</form>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="{% static 'js/script.js' %}" defer></script>
+  </body>
+</html>
