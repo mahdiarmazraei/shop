@@ -2,21 +2,23 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import Group, Permission
+from django.db import models
 
-class Seleruser(AbstractUser):
+class Seleruser(models.Model):
+    user = models.OneToOneField(User,on_delete=models.CASCADE,related_name='Seleruser')
     companyname = models.CharField(max_length=100)
     city = models.CharField(max_length=100)
     fieldproduct = models.CharField(max_length=100)
-    firstname = models.CharField(max_length=100)
-    lastname = models.CharField(max_length=100)
-    username = models.CharField(max_length=100)
-    
+    # firstname = models.CharField(max_length=100)
+    # lastname = models.CharField(max_length=100)
+    # username = models.CharField(max_length=100)
+    groups = models.ManyToManyField(Group, related_name='seleruser_groups')
+    user_permissions = models.ManyToManyField(Permission, related_name='seleruser_user_permissions')
+
     class Meta:
         db_table = 'seleruser'
 
-    def __str__(self):  
-        return self.username
-    empAuth_object = models.Manager()
+   
 
 class Product(models.Model):
     name = models.CharField(max_length=100)

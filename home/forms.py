@@ -1,19 +1,16 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import Seleruser,Product
+from django.contrib.auth.models import User
+from django.db import models
 
 class selerusersignupform(UserCreationForm):
     companyname = forms.CharField(max_length=100)
-    username = forms.CharField(max_length=100)
     city = forms.CharField(max_length=100)
     fieldproduct = forms.CharField(max_length=100)
-    firstname = forms.CharField(max_length=100)
-    lastname = forms.CharField(max_length=100)
-    password1 = forms.CharField(widget=forms.PasswordInput)
-    password2 = forms.CharField(widget=forms.PasswordInput)
     class Meta:
-        model = Seleruser
-        fields = ['username','companyname', 'city', 'fieldproduct', 'firstname', 'lastname', 'password1', 'password2']
+        model = User
+        fields = ['username','companyname', 'city', 'fieldproduct', 'first_name', 'last_name', 'password1', 'password2']
 
 class addproductform(forms.ModelForm):
     name = forms.CharField(max_length=100)

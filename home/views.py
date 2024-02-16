@@ -6,54 +6,60 @@ from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView,LogoutView
 from django.contrib.auth import login,authenticate,logout
-from .models import Product,CartItem,Seleruser
+from .models import Product ,CartItem,Seleruser
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 from os.path import basename
 from .forms import selerusersignupform,addproductform
 
 def addproduct(request):
+    products = Product.objects.all()
+    if not hasattr(request.user, 'Seleruser'):
+        return render(request, 'home2/home2.html',{'product':product}) 
     if request.method == 'POST':
-        form = addproductform(request.POST, request.FILES)
+        seller_profile = request.user.Seleruser
+        form = addproductform(request.POST)
         if form.is_valid():
-            # اینجا فروشنده فعلی به عنوان فروشنده محصول ذخیره می‌شود
-            form.instance.seler = Seleruser.objects.get(id=request.user.id)
-            form.save()
-            return redirect('/')  # مسیر به لیست محصولات
+            product = form.save(commit=False)
+            product.seler = request.user.Seleruser  # تنظیم فروشنده بر اساس کاربر فعلی
+            product.save()
+            return render(request, 'home2/home2.html',{'products':products,'seller_profile':seller_profile})
+              
     else:
         form = addproductform()
-    return render(request, 'home2/addproduct.html', {'form': form})
+        return render(request, 'home2/addproduct.html', {'form': form})
 
 def selerusersignup(request):
     if request.user.is_authenticated:
-        return redirect('/')    
+        if hasattr(request.user, 'Seleruser'):
+            seller_profile = request.user.Seleruser
+            return render(request, 'home2/home2.html', {'seller_profile': seller_profile})
     if request.method == 'POST':
         form = selerusersignupform(request.POST)
         if form.is_valid():
             user = form.save()
-            authenticated_user = authenticate(username=user.username, password=form.cleaned_data['password1'])
-            if authenticated_user is not None:
-                login(request, authenticated_user, backend='django.contrib.auth.backends.ModelBackend')
-                return redirect('/')
-    
-            # username = form.cleaned_data.get('username')
-            # password = form.cleaned_data.get('password1')
-            # user = authenticate(username=username, password=password)
-            # login(request, user,backend='django.contrib.auth.backends.ModelBackend')
-            # می‌توانید به هر صفحه‌ای که دوست دارید منتقل شوید
+            login(request,user,backend='django.contrib.auth.backends.ModelBackend')
+            Seleruser.objects.create(user=user)
+            # if authenticated_user is not None:
+            #     login(request, authenticated_user, backend='django.contrib.auth.backends.ModelBackend')
+            seller_profile = request.user.Seleruser
+            return render(request, 'home2/home2.html', {'seller_profile': seller_profile})
+            return redirect('/')
     else:
         form = selerusersignupform()
-
     return render(request, 'home2/selerusersignup.html', {'form': form})
 
 def view_cart(request):
+    if request.user.is_authenticated:
+        if hasattr(request.user, 'Seleruser'):
+            seller_profile = request.user.Seleruser
+            return render(request, 'home2/home2.html', {'seller_profile': seller_profile})
     cart_items = CartItem.objects.filter(user=request.user)
     total_price = sum(item.product.price * item.quantity for item in cart_items)
     return render(request, 'home2/index.html', {'cart_items': cart_items, 'total_price': total_price})
  
 def add_to_cart(request, product_id):
     product = Product.objects.get(id=product_id)
-    cart_item, created = CartItem.objects.get_or_create(product=product, 
-                                                       user=request.user)
+    cart_item, created = CartItem.objects.get_or_create(product=product,user=request.user)
     cart_item.quantity += 1
     cart_item.total_price += cart_item.product.price
     cart_item.save()
@@ -72,7 +78,11 @@ def home(request):
 def signin(request):
     products = Product.objects.all()
     if request.user.is_authenticated:
-        return render(request,'home2/home2.html',{'products':products})
+        if hasattr(request.user, 'Seleruser'):
+            seller_profile = request.user.Seleruser
+            return render(request, 'home2/home2.html', {'seller_profile': seller_profile})
+        else:
+            return render(request,'home2/home2.html',{'products':products})
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -95,11 +105,19 @@ def profile(request):
     return render(request,'home2/profile.html',{'user':account})
     # return render(request,'home2/profile.html')
 def signout(request):
-    logout(request)
-    return redirect('/')
+    if not hasattr(request.user, 'Seleruser'):
+        logout(request)
+        return redirect('/')
+    else:
+        return redirect('/')
 def signup(request):
+    products = Product.objects.all()
     if request.user.is_authenticated:
-        return redirect('/')    
+        if hasattr(request.user, 'Seleruser'):
+            seller_profile = request.user.Seleruser
+            return render(request, 'home2/home2.html', {'seller_profile': seller_profile})
+        else:
+            return render(request,'home2/home2.html',{'products':products}) 
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
@@ -110,7 +128,7 @@ def signup(request):
             login(request, user,backend='django.contrib.auth.backends.ModelBackend')
             return redirect('/')
         else:
-            return render(request, 'home2/signuptest.html', {'form': form})
+            return render(request, 'home2/signuptest.html',{'form': form})
     else:
         form = UserCreationForm()
         return render(request, 'home2/signuptest.html', {'form': form})
